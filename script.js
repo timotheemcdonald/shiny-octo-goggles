@@ -6,8 +6,8 @@ canvas.height = 500;
 const keys = [];
 
 const player = {
-    x: 0,
-    y: 0,
+    x: 200,
+    y: 200,
     width: 40,
     height: 72,
     frameX: 0,
@@ -29,7 +29,36 @@ function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
 function animate(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-    drawSprite(playerSprite, 0, 0, player.width, player.height, 200, 200, player.width, player.height);
+    drawSprite(playerSprite, player.width * player.frameX, player.height * player.frameY, player.width, player.height, player.x, player.y, player.width, player.height);
+    movePlayer();
     requestAnimationFrame(animate);
 }
 animate();
+
+window.addEventListener("keydown", function(e){
+    keys[e.key] = true;
+    console.log(e.key)
+});
+
+window.addEventListener("keyup", function(e){
+    delete keys[e.key]
+});
+
+function movePlayer(){
+    if(keys['ArrowUp'] && player.y > 100){
+        player.y -= player.speed;
+        player.frameY = 3;
+    }
+    if(keys['ArrowLeft'] && player.x > 0 ){
+        player.x -= player.speed;
+        player.frameY = 1;
+    }
+    if(keys['ArrowDown'] && player.y < canvas.height - player.height){
+        player.y += player.speed;
+        player.frameY = 0;
+    }
+    if(keys['ArrowRight'] && player.x < canvas.width - player.width){
+        player.x += player.speed;
+        player.frameY = 2;
+    }
+}
